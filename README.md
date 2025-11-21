@@ -16,6 +16,11 @@ This repository reflects a real-world data ingestion scenario and shows practica
 - building modular ETL functions
 - loading structured data into Postgres
 
+The dataset used in this project originates from Kaggle – Retail Supply Chain Sales Dataset, but it was manually split into three separate files (CSV, JSON, and XML formats) to simulate a real-world multi-source ingestion scenario.
+
+
+
+
 📑 Logging System
 
 This ETL pipeline includes a simple but effective log file system that tracks every major step of the workflow. Logging is essential for Data Engineering, as it provides transparency, debugging information, and traceability for every run of the pipeline.
