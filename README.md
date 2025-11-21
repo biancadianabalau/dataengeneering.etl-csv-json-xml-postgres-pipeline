@@ -1,6 +1,6 @@
 Project In Progress
 
-📘 README.md – Data Engineering ETL Pipeline (CSV / JSON / XML → PostgreSQL)
+📘 Data Engineering ETL Pipeline (CSV / JSON / XML → PostgreSQL)
 
 📌 Overview
 
