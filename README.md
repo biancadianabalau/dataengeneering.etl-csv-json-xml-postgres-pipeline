@@ -16,6 +16,8 @@ This repository reflects a real-world data ingestion scenario and shows practica
 - building modular ETL functions
 - loading structured data into Postgres
 
+
+
 The dataset used in this project originates from Kaggle (Retail Supply Chain Sales Dataset: https://www.kaggle.com/datasets/shandeep777/retail-supply-chain-sales-dataset), 
 but it was manually split into three separate files (CSV, JSON, and XML formats) to simulate a real-world multi-source ingestion scenario.
 
