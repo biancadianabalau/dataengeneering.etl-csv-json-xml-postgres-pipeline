@@ -1,12 +1,11 @@
-import requests
+
 import numpy as np
 import pandas as pd
 from datetime import datetime
 import xml.etree.ElementTree as ET
-import sqlite3
-import psycopg2
 from sqlalchemy import create_engine
 import os
+
 
 
 
@@ -22,7 +21,7 @@ uid = "postgres"
 
 csv_file = r"C:\Users\User\DataEngineerProject\grocery_chain_data.csv"
 json_file = r"C:\Users\User\DataEngineerProject\grocery_chain_data.json"
-xml_file = r"C:\Users\User\DataEngineerProject\grocery_chain_data.xml"
+xml_file = r"C:\Users\User\DataEngineerProject\grocery_chain_data_simple.xml"
 
 def extract_from_csv(file_to_process): 
     dataframe = pd.read_csv(file_to_process) 
@@ -36,7 +35,7 @@ def extract_from_xml(file_to_process):
     
     tree = ET.parse(file_to_process) 
     root = tree.getroot() 
-    dataframe = pd.DataFrame(columns=[
+    COLUMNS_LIST=[
         "customer_id", 
         "store_name", 
         "transaction_date", 
@@ -44,38 +43,29 @@ def extract_from_xml(file_to_process):
         "product_name", 
         "quantity", 
         "unit_price", 
-        "total_amount"
-    ]) 
-    for record in root: 
+        "total_amount",
+        "discount_amount",  
+        "final_amount",     
+        "loyalty_points",
+    ]
+    
+    dataframe = pd.DataFrame(columns=COLUMNS_LIST) 
+    data_records = []
+
+    for record in root.findall('./record'): 
+        row_data = {}
         
-        def safe_text(tag):
-            el = record.find(tag)
-            return el.text if el is not None else None
-
-        customer_id      = safe_text("customer_id")
-        store_name       = safe_text("store_name")
-        transaction_date = safe_text("transaction_date")
-        aisle            = safe_text("aisle")
-        product_name     = safe_text("product_name")
-
-        quantity   = safe_text("quantity")
-        unit_price = safe_text("unit_price")
-        total_amount = safe_text("total_amount")
+        for column_name in COLUMNS_LIST:
+            element = record.find(column_name)
+            value = element.text if element is not None else None
+            row_data[column_name] = value
+        data_records.append(row_data)
 
 
-        
-        dataframe = pd.concat([dataframe, pd.DataFrame([{
-                "customer_id": customer_id,
-                "store_name": store_name,
-                "transaction_date": transaction_date,
-                "aisle": aisle,
-                "product_name": product_name,
-                "quantity": quantity,
-                "unit_price": unit_price,
-                "total_amount": total_amount
-            }])], ignore_index=True)
- 
-    return dataframe 
+    dataframe = pd.DataFrame(data_records, columns=COLUMNS_LIST)
+    return dataframe
+
+
 
 def extract(csv_file, json_file, xml_file): 
     extracted_data = pd.DataFrame(columns=[
@@ -86,8 +76,11 @@ def extract(csv_file, json_file, xml_file):
         "product_name", 
         "quantity", 
         "unit_price", 
-        "total_amount"
-    ]) # create an empty data frame to hold extracted data  
+        "total_amount",
+        "discount_amount",  
+        "final_amount",     
+        "loyalty_points"    
+    ])  
          
    # extract from single CSV
     df_csv = extract_from_csv(csv_file)
